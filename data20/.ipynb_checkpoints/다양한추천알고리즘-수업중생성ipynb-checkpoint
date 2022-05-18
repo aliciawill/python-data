@@ -834,6 +834,17 @@
     "## 2.장바구니 1번과 제일 유사도가 높은 장바구니를 찾아서\n",
     "## 3.장바구니 1번에게 추천해주고 싶은 item을 추천해주세요."
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## TransactionEncoder : one-hot\n",
+    "## CounterVectorizer : count amount\n",
+    "## TF-IDFVectorizer : reduce most frequency weight"
+   ]
   }
  ],
  "metadata": {
