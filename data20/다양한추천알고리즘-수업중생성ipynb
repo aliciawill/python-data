@@ -837,6 +837,25 @@
   },
   {
    "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tfidf_matrix2 = tfidf.fit_transform(data)\n",
+    "tfidf_matrix2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cosine_similarity(tfidf_matrix, tfidf_matrix)"
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 51,
    "metadata": {},
    "outputs": [],
