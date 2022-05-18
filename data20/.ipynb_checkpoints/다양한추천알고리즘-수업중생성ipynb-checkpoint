@@ -1,6 +1,860 @@
 {
- "cells": [],
- "metadata": {},
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import mlxtend\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import warnings\n",
+    "warnings.filterwarnings(action='ignore')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from mlxtend.preprocessing import TransactionEncoder"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = np.array([\n",
+    "    ['우유', '기저귀', '쥬스'],\n",
+    "    ['양상추', '기저귀', '맥주'],\n",
+    "    ['우유', '양상추', '기저귀', '쥬스'],\n",
+    "    ['양상추', '맥주']\n",
+    "])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "te = TransactionEncoder()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[ True False False  True  True]\n",
+      " [ True  True  True False False]\n",
+      " [ True False  True  True  True]\n",
+      " [False  True  True False False]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "te_ary = te.fit(data).transform(data)\n",
+    "print(te_ary)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.DataFrame(te_ary, columns=te.columns_)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>기저귀</th>\n",
+       "      <th>맥주</th>\n",
+       "      <th>양상추</th>\n",
+       "      <th>우유</th>\n",
+       "      <th>쥬스</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>False</td>\n",
+       "      <td>True</td>\n",
+       "      <td>True</td>\n",
+       "      <td>False</td>\n",
+       "      <td>False</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     기저귀     맥주    양상추     우유     쥬스\n",
+       "0   True  False  False   True   True\n",
+       "1   True   True   True  False  False\n",
+       "2   True  False   True   True   True\n",
+       "3  False   True   True  False  False"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from mlxtend.frequent_patterns import apriori"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>support</th>\n",
+       "      <th>itemsets</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0.75</td>\n",
+       "      <td>(기저귀)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(맥주)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0.75</td>\n",
+       "      <td>(양상추)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(우유)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(쥬스)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(양상추, 기저귀)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(우유, 기저귀)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(쥬스, 기저귀)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(맥주, 양상추)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(쥬스, 우유)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>0.50</td>\n",
+       "      <td>(쥬스, 우유, 기저귀)</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    support       itemsets\n",
+       "0      0.75          (기저귀)\n",
+       "1      0.50           (맥주)\n",
+       "2      0.75          (양상추)\n",
+       "3      0.50           (우유)\n",
+       "4      0.50           (쥬스)\n",
+       "5      0.50     (양상추, 기저귀)\n",
+       "6      0.50      (우유, 기저귀)\n",
+       "7      0.50      (쥬스, 기저귀)\n",
+       "8      0.50      (맥주, 양상추)\n",
+       "9      0.50       (쥬스, 우유)\n",
+       "10     0.50  (쥬스, 우유, 기저귀)"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "result = apriori(df, min_support=0.5, use_colnames=True)\n",
+    "result"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 쥬스+우유를 함께 산 사람에게 추천을 해준다고 한다면, \n",
+    "## 맥주보다는 기저귀를 추천해야함.\n",
+    "## 지지도 기반으로 판단!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>support</th>\n",
+       "      <th>itemsets</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0.75</td>\n",
+       "      <td>(기저귀)</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0.75</td>\n",
+       "      <td>(양상추)</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   support itemsets\n",
+       "0     0.75    (기저귀)\n",
+       "1     0.75    (양상추)"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "apriori(df, min_support=0.7, use_colnames=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "pandas.core.frame.DataFrame"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(result) #result = apriori(df, min_support=0.5, use_colnames=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# result에서 마지막 itemsets컬럼값 추출\n",
+    "## 쥬스, 우유와 함께 추천하면 좋을 item은??"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "support               0.5\n",
+       "itemsets    (쥬스, 우유, 기저귀)\n",
+       "Name: 10, dtype: object"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "choice = result.iloc[10, :]\n",
+    "choice"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "frozenset({'기저귀', '우유', '쥬스'})"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "items = choice['itemsets']\n",
+    "items"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'기저귀'"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(items)[2]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## one-hot인코딩 방식의 테이블이 필요!!! \n",
+    "## 실제로는 물건의 개수가 아주 많음.\n",
+    "## item 수 => 1조: 38441개의 여행지, 2조: 388개의 물건\n",
+    "## user 수 => 1조: 70000명, 2조: 800명\n",
+    "## 1조: 70000 * 38441, 2조: 800 * 388\n",
+    "## 1조인 경우 한 사람이 간 곳이 10개라고 한다면, 나머지는 0\n",
+    "## ==> 0이 2차원 데이터: 희소행렬(sparse matrix)\n",
+    "## TF-IDF, CounterVectorizor, TransactionEncoder"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#!pip install gensim"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from gensim.models import Word2Vec"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 자연어에서 특정한 단어(word)를 중심으로 앞 뒤의 단어를 유추(예측, 추론)할 때 사용됨."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "doc = [\n",
+    "    'you say goodbye and I say hello', \n",
+    "    'i say happy or he said white',\n",
+    "    'we say unhappy and angry black'\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "doc2 = [\n",
+    "    '나는 굿바이라고 했고, 너는 헬로우라고 했어.', \n",
+    "    '나는 기쁘다고 했고, 너는 하얗게 슬프다고 했어.',\n",
+    "    '우리는 행복하지 않고, 블랙으로 슬퍼'\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[['you', 'say', 'goodbye', 'and', 'I', 'say', 'hello'],\n",
+       " ['i', 'say', 'happy', 'or', 'he', 'said', 'white'],\n",
+       " ['we', 'say', 'unhappy', 'and', 'angry', 'black']]"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "##문장을 토큰으로 끊어내자.\n",
+    "sentences = [sentence.split(' ') for sentence in doc]\n",
+    "sentences"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[['나는', '굿바이라고', '했고,', '너는', '헬로우라고', '했어.'],\n",
+       " ['나는', '기쁘다고', '했고,', '너는', '하얗게', '슬프다고', '했어.'],\n",
+       " ['우리는', '행복하지', '않고,', '블랙으로', '슬퍼']]"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sentences2 = [sentence.split(' ') for sentence in doc2]\n",
+    "sentences2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = Word2Vec(window=1, min_count=1) ##특정한 단어의 앞뒤 단어를 유추가능.\n",
+    "## window: 유추하는 계산을 할 때 특정한 단어의 앞뒤 몇개를 가지고 계산을 할지의 단위\n",
+    "## min_count: 특정한 패턴의 출현 횟수"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model2 = Word2Vec(window=1, min_count=1)\n",
+    "model2.build_vocab(sentences2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model.build_vocab(sentences) #영문문장을 가지고 계산을 함."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[('or', 0.21617144346237183),\n",
+       " ('hello', 0.0931011363863945),\n",
+       " ('said', 0.09291724115610123),\n",
+       " ('i', 0.07963486015796661),\n",
+       " ('happy', 0.06285081058740616),\n",
+       " ('you', 0.05433368682861328),\n",
+       " ('he', 0.0270574688911438),\n",
+       " ('white', 0.0161347147077322),\n",
+       " ('and', -0.010839186608791351),\n",
+       " ('unhappy', -0.027750365436077118)]"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## 특정한 단어를 주고 앞뒤 단어를 추론해보자.\n",
+    "model.wv.most_similar('say') ##비지도!!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[('say', 0.21617144346237183),\n",
+       " ('he', 0.044689204543828964),\n",
+       " ('happy', 0.015025186352431774),\n",
+       " ('you', 0.010695194825530052),\n",
+       " ('white', 0.001951059210114181),\n",
+       " ('black', -0.03284314647316933),\n",
+       " ('goodbye', -0.0455227792263031),\n",
+       " ('hello', -0.045689091086387634),\n",
+       " ('i', -0.0742427185177803),\n",
+       " ('said', -0.09326909482479095)]"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.wv.most_similar('or')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## or단어 앞으로는 say가 나올 가능성이 제일 크고,\n",
+    "## or단어 뒤로는 black단어가 나올 가능성이 제일 큰 것을 알 수 있다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[('굿바이라고', 0.13725271821022034),\n",
+       " ('나는', 0.06797593832015991),\n",
+       " ('우리는', 0.03364057093858719),\n",
+       " ('블랙으로', 0.009391184896230698),\n",
+       " ('기쁘다고', 0.00831596553325653),\n",
+       " ('슬퍼', 0.004503015894442797),\n",
+       " ('헬로우라고', -0.0036444757133722305),\n",
+       " ('했어.', -0.010839187540113926),\n",
+       " ('했고,', -0.023671669885516167),\n",
+       " ('슬프다고', -0.09575346857309341)]"
+      ]
+     },
+     "execution_count": 40,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model2.wv.most_similar('너는')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## '너는' 한글 단어 앞으로 나올 단어로는 굿바이라고를 추천,\n",
+    "## '너는' 한글 단어 뒤로 나올 단어로는 헬로우라고를 추천"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "from sklearn.feature_extraction.text import TfidfVectorizer\n",
+    "from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tfidf = TfidfVectorizer(stop_words='english') #불용어처리가능한 ifidf객체 생성\n",
+    "##tfidf는 빈도수를 구하긴 하지만, 문서마다 자주 등장하는 문서는 각 문서를 구분할 단어로 사용하기는\n",
+    "##부적합하여 가중치를 낮추어 계산"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<3x9 sparse matrix of type '<class 'numpy.float64'>'\n",
+       "\twith 11 stored elements in Compressed Sparse Row format>"
+      ]
+     },
+     "execution_count": 45,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tfidf_matrix = tfidf.fit_transform(doc)\n",
+    "tfidf_matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 3 x 9에서\n",
+    "## 3은 문서의 개수\n",
+    "## 9는 단어의 개수"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[0.        , 0.        , 0.54270061, 0.        , 0.54270061,\n",
+       "        0.        , 0.64105545, 0.        , 0.        ],\n",
+       "       [0.        , 0.        , 0.        , 0.54645401, 0.        ,\n",
+       "        0.54645401, 0.32274454, 0.        , 0.54645401],\n",
+       "       [0.54645401, 0.54645401, 0.        , 0.        , 0.        ,\n",
+       "        0.        , 0.32274454, 0.54645401, 0.        ]])"
+      ]
+     },
+     "execution_count": 47,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tfidf_matrix.toarray()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[1.        , 0.20689715, 0.20689715],\n",
+       "       [0.20689715, 1.        , 0.10416404],\n",
+       "       [0.20689715, 0.10416404, 1.        ]])"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## 문서간의 유사도를 구해봅시다.!!\n",
+    "cosine_similarity(tfidf_matrix, tfidf_matrix)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 행은 문서1, 문서2, 문서3\n",
+    "## 열도 문서1, 문서2, 문서3\n",
+    "## 문서1 + 문서2: 0.21\n",
+    "## 문서1 + 문서3: 0.21\n",
+    "## 문서2 + 문서3: 0.10\n",
+    "## 문서1과 2, 문서1과 3이 유사하다.\n",
+    "## 문서2와 3은 유사하지 않다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 1-1.모든 장바구니 유사도를 구해보세요.\n",
+    "## 1-2.유사도를 그래프로 비교해주세요. \n",
+    "## 2.장바구니 1번과 제일 유사도가 높은 장바구니를 찾아서\n",
+    "## 3.장바구니 1번에게 추천해주고 싶은 item을 추천해주세요."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.9"
+  }
+ },
  "nbformat": 4,
  "nbformat_minor": 4
 }

@@ -787,10 +787,53 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[1.        , 0.20689715, 0.20689715],\n",
+       "       [0.20689715, 1.        , 0.10416404],\n",
+       "       [0.20689715, 0.10416404, 1.        ]])"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "## 문서간의 유사도를 구해봅시다.!!\n",
+    "cosine_similarity(tfidf_matrix, tfidf_matrix)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
    "metadata": {},
    "outputs": [],
-   "source": []
+   "source": [
+    "## 행은 문서1, 문서2, 문서3\n",
+    "## 열도 문서1, 문서2, 문서3\n",
+    "## 문서1 + 문서2: 0.21\n",
+    "## 문서1 + 문서3: 0.21\n",
+    "## 문서2 + 문서3: 0.10\n",
+    "## 문서1과 2, 문서1과 3이 유사하다.\n",
+    "## 문서2와 3은 유사하지 않다."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 1-1.모든 장바구니 유사도를 구해보세요.\n",
+    "## 1-2.유사도를 그래프로 비교해주세요. \n",
+    "## 2.장바구니 1번과 제일 유사도가 높은 장바구니를 찾아서\n",
+    "## 3.장바구니 1번에게 추천해주고 싶은 item을 추천해주세요."
+   ]
   }
  ],
  "metadata": {
